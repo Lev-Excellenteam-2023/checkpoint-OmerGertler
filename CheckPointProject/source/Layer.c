@@ -1,7 +1,6 @@
 # pragma once
 
-struct Class
+struct Liar
 {
     /* data */
 };
-
