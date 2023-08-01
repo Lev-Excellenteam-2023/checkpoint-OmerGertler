@@ -5,6 +5,18 @@
 
 School_t * school;
 
+enum menu_inputs {
+    Insert = '0',
+    Delete = '1',
+    Edit = '2',
+    Search = '3',
+    Showall = '4',
+    Top10 = '5',
+    UnderperformedStudents = '6',
+    Average = '7',
+    Export = '8',
+    Exit = '9'
+};
 
 void insertStudentToClass(School_t* school, Student_t* student)
 {
@@ -78,12 +90,12 @@ void insertNewStudent(School_t* school)
     int classNum = 0;
     int grades[10];
 
-    printf("Insert First Name: %s\n", firstName);
-    fgets(firstName, sizeof(firstName), stdin);
-    printf("Insert Last Name: %s\n", lastName);
-    fgets(lastName, sizeof(lastName), stdin);
-    printf("Insert Phone Number: %s\n", phoneNumber);
-    fgets(phoneNumber, sizeof(phoneNumber), stdin);
+    printf("Insert First Name:\n");
+    scanf("%19s", firstName);  //scanf("%19", firstName, sizeof(firstName));
+    printf("Insert Last Name:\n");
+    scanf("%19s", lastName);
+    printf("Insert Phone Number:\n");
+    scanf("%19s", phoneNumber);
     printf("Insert Layer:\n");
     scanf("%d", &layer);
     printf("Insert Class:\n");
@@ -101,36 +113,36 @@ void insertNewStudent(School_t* school)
 }
 
 
-//void deleteStudent(School_t* school)
-//{
-//    char firstName[20];
-//    char lastName[20];
-//    printf("Insert First Name: %s\n", firstName);
-//    fgets(firstName, sizeof(firstName), stdin);
-//    printf("Insert Last Name: %s\n", lastName);
-//    fgets(lastName, sizeof(lastName), stdin);
-//
-//    Student_t* it;
-//    int found = 0;
-//    for (int i = 0; i < 12 && found == 0; ++i)
-//    {
-//        for (int j = 0; j < 10 && found == 0; ++j)
-//        {
-//            it = school->layers[i]->classes[j]->students;
-//            if (strcmp(it->next->_firstName, firstName) == 0 && strcmp(it->next->_lastName, lastName) == 0) // names are equal
-//            {
-//                Student_t* tmp;
-//                tmp = it->next;
-//                it->next = tmp->next;
-//                free(tmp);
-//                found = 1;
-//                printf("Student deletes successfuly\n");
-//            }
-//        }
-//    }
-//    if(found == 0)
-//        printf("This student is not exist\n");
-//}
+void deleteStudent(School_t* school)
+{
+    char firstName[20];
+    char lastName[20];
+    printf("Insert First Name: %s\n", firstName);
+    fgets(firstName, sizeof(firstName), stdin);
+    printf("Insert Last Name: %s\n", lastName);
+    fgets(lastName, sizeof(lastName), stdin);
+
+    Student_t* it;
+    int found = 0;
+    for (int i = 0; i < 12 && found == 0; ++i)
+    {
+        for (int j = 0; j < 10 && found == 0; ++j)
+        {
+            it = school->layers[i]->classes[j]->students;
+            if (strcmp(it->next->_firstName, firstName) == 0 && strcmp(it->next->_lastName, lastName) == 0) // names are equal
+            {
+                Student_t* tmp;
+                tmp = it->next;
+                it->next = tmp->next;
+                free(tmp);
+                found = 1;
+                printf("Student deletes successfuly\n");
+            }
+        }
+    }
+    if(found == 0)
+        printf("This student is not exist\n");
+}
 
 
 /*
@@ -138,29 +150,72 @@ void insertNewStudent(School_t* school)
 */
 void printMenu()
 {
-    printf("MENU: \n");
-    printf("----------\n");
-    printf("Enter 1 to insert a new student\n");
-    printf("Enter 2 to delete student\n");
-    printf("Enter 3 to update student details\n");
-    printf("Enter 4 to show student details\n");
-    printf("Enter 5 to show the 10'th first students of specific course\n");
-    printf("Enter 6 to show the students that have to be excelled from school\n");
-    printf("Enter 7 to show the average of a specific courese\n");
-    printf("Enter 8 to import data to DB\n");
-    printf("Enter 0 to exit\n\n");
+    printf("\n|School Manager<::>Home|\n");
+    printf("--------------------------------------------------------------------------------\n");
+    //printf("Welcome to ( %s ) School!\nYou have inserted ( %zu ) students.\n\n", school.name, school.numOfStudents);
+    printf("\t[0] |--> Insert\n");
+    printf("\t[1] |--> Delete\n");
+    printf("\t[2] |--> Edit\n");
+    printf("\t[3] |--> Search\n");
+    printf("\t[4] |--> Show All\n");
+    printf("\t[5] |--> Top 10 students per course\n");
+    printf("\t[6] |--> Underperformed students\n");
+    printf("\t[7] |--> Average per course\n");
+    printf("\t[8] |--> Export\n");
+    printf("\t[9] |--> Exit\n");
+    printf("\n\tPlease Enter Your Choice (0-9): ");
 }
 
 
 int main()
 {
-    int choise = -1;
     School_t* school = readFile();
 
-    while (choise != 0)
-    {
+    char input;
+    do {
         printMenu();
-    }
+        input = getc(stdin);
+        fflush(stdin);
+        getc(stdin);
+        switch (input) {
+        case Insert:
+            insertNewStudent(school);
+            break;
+        case Delete:
+            deleteStudent(school);
+            break;
+        case Edit:
+            //editStudentGrade();
+            break;
+        case Search:
+            //searchStudent();
+            break;
+        case Showall:
+            //printAllStudents();
+            break;
+        case Top10:
+            //printTopNStudentsPerCourse();
+            break;
+        case UnderperformedStudents:
+            //printUnderperformedStudents();
+            break;
+        case Average:
+            //printAverage();
+            break;
+        case Export:
+            //exportDatabase();
+            break;
+        case Exit:
+            //handleClosing();
+            break;
+        default:
+            printf("\nThere is no item with symbol \"%c\".Please enter a number between 1-10!\nPress any key to continue...",
+                input);
+            getc(stdin);
+            getc(stdin);
+            break;
+        }
+    } while (input != Exit);
 
     for (int i = 0; i < 12; ++i)
         freeLayer(school->layers[i]);
