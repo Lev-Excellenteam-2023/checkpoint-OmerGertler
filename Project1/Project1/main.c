@@ -115,6 +115,38 @@ void insertNewStudent(School_t* school)
 
 void deleteStudent(School_t* school)
 {
+    Student_t* it = findStudentByName(school);
+
+    Student_t* tmp;
+    tmp = it->next;
+    it->next = tmp->next;
+    free(tmp);
+    printf("Student deletes successfuly\n");
+}
+
+
+void editStudentGrade(School_t* school)
+{
+    int number, grade;
+    Student_t* student = findStudentByName(school);
+    printf("Enter course number (1-10): \n");
+    scanf("%d", &number);
+    printf("Enter new grade (0-100): \n");
+    scanf("%d", &grade);
+
+    student->grades[number] = grade;
+}
+
+
+void searchStudent(School_t* school)
+{
+    Student_t* student = findStudentByName(school);
+    printStudent(student);
+}
+
+
+Student_t* findStudentByName(School_t* school)
+{
     char firstName[20];
     char lastName[20];
     printf("Insert First Name: %s\n", firstName);
@@ -131,17 +163,43 @@ void deleteStudent(School_t* school)
             it = school->layers[i]->classes[j]->students;
             if (strcmp(it->next->_firstName, firstName) == 0 && strcmp(it->next->_lastName, lastName) == 0) // names are equal
             {
-                Student_t* tmp;
-                tmp = it->next;
-                it->next = tmp->next;
-                free(tmp);
-                found = 1;
-                printf("Student deletes successfuly\n");
+                found == 1;
             }
         }
     }
-    if(found == 0)
+    if (found == 0)
         printf("This student is not exist\n");
+    return it;
+}
+
+
+void printAllStudents(School_t* school)
+{
+    printSchool(school);
+}
+
+
+void printTopNStudentsPerCourse(School_t* school)
+{
+    int layerIndex, course;
+    Student_t* student = findStudentByName(school);
+    printf("Enter layer number (1-12): \n");
+    scanf("%d", &layerIndex);
+    printf("Enter course index (1-10): \n");
+    scanf("%d", &course);
+
+    Layer_t* layer = school->layers[layerIndex];
+    Student_t* students[10];
+    int topIndex = 0, lowIndex = 0;
+
+    for (int i = 0; i < 10; ++i)
+    {
+        Student_t* it = layer->classes[i]->students;
+        while(it =! NULL)
+        {
+
+        }
+    }
 }
 
 
@@ -185,28 +243,28 @@ int main()
             deleteStudent(school);
             break;
         case Edit:
-            //editStudentGrade();
+            editStudentGrade(school);
             break;
         case Search:
-            //searchStudent();
+            searchStudent(school);
             break;
         case Showall:
-            //printAllStudents();
+            printAllStudents(school);
             break;
         case Top10:
-            //printTopNStudentsPerCourse();
+            printTopNStudentsPerCourse(school);
             break;
         case UnderperformedStudents:
-            //printUnderperformedStudents();
+            //printUnderperformedStudents(school);
             break;
         case Average:
-            //printAverage();
+            //printAverage(school);
             break;
         case Export:
-            //exportDatabase();
+            //exportDatabase(school);
             break;
         case Exit:
-            //handleClosing();
+            //handleClosing(school);
             break;
         default:
             printf("\nThere is no item with symbol \"%c\".Please enter a number between 1-10!\nPress any key to continue...",
