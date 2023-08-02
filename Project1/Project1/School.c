@@ -19,3 +19,13 @@ School_t * createSchool(char* sname)
      
     return school;  
 }
+
+
+void printSchool(School_t* school)
+{
+    for (int i = 0; i < 12; ++i)
+    {
+        printf("Layer %d students:\n", i + 1);
+        printLayer(school->layers[i]);
+    }
+}

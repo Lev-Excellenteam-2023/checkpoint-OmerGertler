@@ -29,3 +29,14 @@ void freeLayer(Layer_t* layer)
         freeClass(layer->classes[i]);
     free(layer);
 }
+
+void printLayer(Layer_t* layer)
+{
+    printf("students:\n");
+
+    for (int i = 0; i < 10; ++i)
+    {
+        printf("Class %d students:\n", i + 1);
+        printClass(layer->classes[i]);
+    }
+}
